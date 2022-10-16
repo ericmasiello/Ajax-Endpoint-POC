@@ -1,0 +1,50 @@
+<html>
+  <body>
+    <h1>My App</h1>
+    <button>First</button>
+    <div id="first"></div>
+
+    <button>Second</button>
+    <div id="second"></div>
+
+    <script type="module">
+      import { fetchAndBootstrap } from './public/utils/fetchAndBootstrap.js';
+
+      const createMountAndExecuteHandler = (...fetchArgs) => (mountElement) => (...bootstrapArgs) => (event) => {
+        // create the bootstrap helper based on the fetch arguments
+        fetchAndBootstrap(...fetchArgs)
+          // returns a promise, so when resolved, `fetchAndBootstrap` returns a helper
+          .then(bootstrapHelper => {
+            return bootstrapHelper
+              // call `mount()` with the intended mount element
+              .mount(mountElement)
+              // call bootstrap with whatever bootstrapping arguments were passed
+              // it returns a promise
+              .bootstrap(...bootstrapArgs);
+          })
+          .then(result => {
+            // this `.then()` is likely only for info only, not required
+            console.log('Successfully called bootstrap');
+            console.log('bootstrap function returned value', result);
+          })
+          .catch(error => {
+            console.error('There was an error loading your module', error);
+          });
+      }
+
+      const firstHandler = createMountAndExecuteHandler
+        ('/api/content')
+        (document.getElementById('first'))
+        (4, 3);
+
+      const secondHandler = createMountAndExecuteHandler
+        ('/api/content')
+        (document.getElementById('second'))
+        (7, 10);
+
+      document.getElementsByTagName('button')?.[0]?.addEventListener('click', firstHandler);
+      document.getElementsByTagName('button')?.[1]?.addEventListener('click', secondHandler);
+
+    </script>
+  </body>
+</html>

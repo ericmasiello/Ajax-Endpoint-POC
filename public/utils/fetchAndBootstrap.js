@@ -1,6 +1,6 @@
 import { Mount } from './Mount.js';
 
-export const fetchAndMount = async (url, options = {}) => {
+export const fetchAndBootstrap = async (url, options = {}) => {
   const response = await fetch(url, options);
   if (!response.ok) {
     throw new Error(response.status);

@@ -4,7 +4,6 @@ import FastifyStatic from '@fastify/static'
 import ejs from 'ejs';
 import path from 'path';
 import fs from 'fs';
-import { v4 } from 'uuid'
 import process from 'process';
 
 const fastify = Fastify({
@@ -22,23 +21,25 @@ fastify.register(FastifyView, {
   },
 });
 
-// Declare a route
+
+/*
+ * Load the homepage
+ */
 fastify.get('/', function (request, reply) {
-  return reply.view("/templates/index.ejs");
-})
+  return reply.view("/templates/pages/index.ejs");
+});
 
-// fastify.get('/api/content', async function(request, reply) {
-//   // ejs/html response
-//   const uuid = v4();
-//   return reply.view("/templates/test.ejs", { text: "Eric was here", uuid });
-// })
-
+/*
+ * Define API endpoints
+ */
 fastify.get('/api/content', async function(request, reply) {
-  const template = fs.readFileSync(path.join('templates', 'test.ejs'), {encoding:'utf8'})
-  const uuid = v4();
-  const html = ejs.render(template, { text: "Eric was json", uuid: uuid });
+  // fetch the template from the file system
+  const template = fs.readFileSync(path.join('templates', 'partials/content.ejs'), {encoding:'utf8'})
+  // apply the data to the template to compute the final HTML
+  const html = ejs.render(template, { text: "Hello world" });
 
-  reply.send({ html, __meta: { uuid } })
+  // send the JSON
+  reply.send({ html, script: '/public/partials/content.js' })
 })
 
 
