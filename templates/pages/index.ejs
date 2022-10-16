@@ -8,19 +8,19 @@
     <div id="second"></div>
 
     <script type="module">
-      import { fetchAndBootstrap } from './public/utils/fetchAndBootstrap.js';
+      import { fetchAsyncUI } from './public/utils/fetchAsyncUI.js';
 
-      const createMountAndExecuteHandler = (...fetchArgs) => (mountElement) => (...bootstrapArgs) => (event) => {
+      const createMountAndExecuteHandler = (...fetchArgs) => (mountElement) => (...hydrateArgs) => (event) => {
         // create the bootstrap helper based on the fetch arguments
-        fetchAndBootstrap(...fetchArgs)
-          // returns a promise, so when resolved, `fetchAndBootstrap` returns a helper
-          .then(bootstrapHelper => {
-            return bootstrapHelper
-              // call `mount()` with the intended mount element
-              .mount(mountElement)
-              // call bootstrap with whatever bootstrapping arguments were passed
-              // it returns a promise
-              .bootstrap(...bootstrapArgs);
+        fetchAsyncUI({
+          fetchConfig: fetchArgs,
+          mountElement,
+          hydrateArgs,
+        })
+          // returns a promise, so when resolved, `fetchAsyncUI` returns a helper
+          .then(asyncUI => {
+            return asyncUI
+              .asyncMount()
           })
           .then(result => {
             // this `.then()` is likely only for info only, not required
@@ -33,14 +33,14 @@
       }
 
       const firstHandler = createMountAndExecuteHandler
-        ('/api/content')
+        ('/api/content?title=First Title')
         (document.getElementById('first'))
         (4, 3);
 
       const secondHandler = createMountAndExecuteHandler
-        ('/api/content')
+        ('/api/content?title=Second Title')
         (document.getElementById('second'))
-        (7, 10);
+        (7, 10, 23, 87);
 
       document.getElementsByTagName('button')?.[0]?.addEventListener('click', firstHandler);
       document.getElementsByTagName('button')?.[1]?.addEventListener('click', secondHandler);

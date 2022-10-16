@@ -36,7 +36,7 @@ fastify.get('/api/content', async function(request, reply) {
   // fetch the template from the file system
   const template = fs.readFileSync(path.join('templates', 'partials/content.ejs'), {encoding:'utf8'})
   // apply the data to the template to compute the final HTML
-  const html = ejs.render(template, { text: "Hello world" });
+  const html = ejs.render(template, { title: request.query.title });
 
   // send the JSON
   reply.send({ html, script: '/public/partials/content.js' })
