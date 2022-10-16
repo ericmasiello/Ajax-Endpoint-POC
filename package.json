@@ -1,0 +1,21 @@
+{
+  "name": "ajax-endpoints-poc",
+  "version": "1.0.0",
+  "description": "",
+  "type": "module",
+  "main": "app/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Eric Masiello <eric.j.masiello@gmail.com> (http://synbydesign.com/)",
+  "license": "MIT",
+  "dependencies": {
+    "@fastify/static": "^6.5.0",
+    "@fastify/view": "^7.1.0",
+    "ejs": "^3.1.8",
+    "fastify": "^4.8.1",
+    "uuid": "^9.0.0"
+  }
+}

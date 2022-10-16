@@ -1,0 +1,29 @@
+<html>
+  <body>
+    <h1>My App</h1>
+    <button>First</button>
+    <div id="first"></div>
+
+    <button>Second</button>
+    <div id="second"></div>
+
+    <script type="module">
+      import { fetchAndMount } from './public/fetchAndMount.js';
+
+      const mountAjaxContent = (elementToMountHTMLInto) => (...bootstrapArgs) => (event) => {
+        fetchAndMount('/api/content').then((mountAjax) => {
+          mountAjax
+            .mount(elementToMountHTMLInto).then(mountAjax => {
+              mountAjax.bootstrap(...bootstrapArgs);
+            });
+        });
+      };
+
+      const firstHandler = mountAjaxContent(document.getElementById('first'))(4, 5);
+      const secondHandler = mountAjaxContent(document.getElementById('second'))(20, 22);
+    
+      document.getElementsByTagName('button')?.[0]?.addEventListener('click', firstHandler);
+      document.getElementsByTagName('button')?.[1]?.addEventListener('click', secondHandler);
+    </script>
+  </body>
+</html>
