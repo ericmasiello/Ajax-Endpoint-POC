@@ -1,7 +1,6 @@
 import { AsyncUI } from './AsyncUI.js';
 
 export const fetchAsyncUI = async (config) => {
-
   const { fetchConfig, mountElement, hydrateArgs } = config;
 
   const response = await fetch(...fetchConfig);
@@ -15,4 +14,4 @@ export const fetchAsyncUI = async (config) => {
     hydrateArgs,
   });
   return mountWrapper;
-}
+};

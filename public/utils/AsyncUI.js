@@ -14,13 +14,15 @@ export class AsyncUI {
         return resolve();
       }
 
-      return import(script).then(module => {
-        if (typeof module?.hydrate === 'function') {
-          return resolve(module.hydrate(this.htmlElement)(...this.hydrateArgs));
-        }
-        console.warn(`script resolved but lacked a named export \`export function hydrate() {}\`.`)
-        return resolve();
-      }).catch(reject);
+      return import(script)
+        .then((module) => {
+          if (typeof module?.hydrate === 'function') {
+            return resolve(module.hydrate(this.htmlElement)(...this.hydrateArgs));
+          }
+          console.warn(`script resolved but lacked a named export \`export function hydrate() {}\`.`);
+          return resolve();
+        })
+        .catch(reject);
     });
   }
 }

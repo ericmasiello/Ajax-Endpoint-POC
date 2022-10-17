@@ -17,32 +17,34 @@ const computeSum = (rootElement) => () => {
  * down in the JSON.html payload already created and then just decoreate the HTML
  * with JavaScript behaviors.
  */
-export const hydrate = (partialRootElement) => (...values) => {
-  const listItems = values.map(value => {
-    const listItem = document.createElement('li');
-    const input = document.createElement('input');
-    input.value = value;
-    input.type = 'number';
-    listItem.append(input);
-    return listItem;
-  });
+export const hydrate =
+  (partialRootElement) =>
+  (...values) => {
+    const listItems = values.map((value) => {
+      const listItem = document.createElement('li');
+      const input = document.createElement('input');
+      input.value = value;
+      input.type = 'number';
+      listItem.append(input);
+      return listItem;
+    });
 
-  const result = document.createElement('div');
+    const result = document.createElement('div');
 
-  const mountElement = partialRootElement.querySelector('[data-name="dynamic-data"]');
+    const mountElement = partialRootElement.querySelector('[data-name="dynamic-data"]');
 
-  const mountFragement = document.createDocumentFragment();
+    const mountFragement = document.createDocumentFragment();
 
-  const list = document.createElement('ul');
-  listItems.forEach((element) => list.append(element));
-  mountFragement.append(list);
-  mountFragement.append(result);
+    const list = document.createElement('ul');
+    listItems.forEach((element) => list.append(element));
+    mountFragement.append(list);
+    mountFragement.append(result);
 
-  const computeHandler = computeSum(mountElement);
+    const computeHandler = computeSum(mountElement);
 
-  mountElement.append(mountFragement);
-  // trigger computeSum on each keyup
-  mountElement.addEventListener('keyup', computeHandler);
-  // trigger to compute initial value
-  computeHandler();
-}
+    mountElement.append(mountFragement);
+    // trigger computeSum on each keyup
+    mountElement.addEventListener('keyup', computeHandler);
+    // trigger to compute initial value
+    computeHandler();
+  };
