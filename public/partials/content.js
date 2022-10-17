@@ -13,6 +13,9 @@ const computeSum = (rootElement) => () => {
 /*
  * hydrate method is used to decorate loaded JSON html
  * snippet with javascript beheaviors.
+ * This demo creates the markup with JavaScript. In practice, you'd probably send the HTML
+ * down in the JSON.html payload already created and then just decoreate the HTML
+ * with JavaScript behaviors.
  */
 export const hydrate = (partialRootElement) => (...values) => {
   const listItems = values.map(value => {

@@ -6,7 +6,7 @@
   "main": "app/index.js",
   "scripts": {
     "start": "node src/index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "cypress": "cypress open"
   },
   "keywords": [],
   "author": "Eric Masiello <eric.j.masiello@gmail.com> (http://synbydesign.com/)",
@@ -17,5 +17,8 @@
     "ejs": "^3.1.8",
     "fastify": "^4.8.1",
     "uuid": "^9.0.0"
+  },
+  "devDependencies": {
+    "cypress": "^10.10.0"
   }
 }

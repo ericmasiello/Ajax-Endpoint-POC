@@ -33,13 +33,27 @@ fastify.get('/', function (request, reply) {
  * Define API endpoints
  */
 fastify.get('/api/content', async function(request, reply) {
+
+  
   // fetch the template from the file system
-  const template = fs.readFileSync(path.join('templates', 'partials/content.ejs'), {encoding:'utf8'})
+
+  const script = '/public/partials/content.js';
+  const template = fs.readFileSync(path.join('templates', 'partials/content.ejs'), { encoding:'utf8' });
+
   // apply the data to the template to compute the final HTML
   const html = ejs.render(template, { title: request.query.title });
-
+  
+  /*
+   * if ?html=true query string is provided, we wrap the response in a pre-fab HTML
+   * template that will render and execute the hydrate function
+   */
+  if (request.query.html) {
+    const wrapperTemplate = fs.readFileSync(path.join('templates', 'pages', 'ajaxHtml.ejs'), { encoding: 'utf8' });
+    const completeHtml = ejs.render(wrapperTemplate, { html, script, hydrateArgs: request.query.hydrateArgs });
+    return reply.type('text/html').send(completeHtml);
+  }
   // send the JSON
-  reply.send({ html, script: '/public/partials/content.js' })
+  reply.send({ html, script })
 })
 
 
