@@ -1,20 +1,19 @@
-import Fastify from 'fastify'
+import Fastify from 'fastify';
 import FastifyView from '@fastify/view';
-import FastifyStatic from '@fastify/static'
+import FastifyStatic from '@fastify/static';
 import ejs from 'ejs';
 import path from 'path';
 import fs from 'fs';
-import { v4 } from 'uuid'
 import process from 'process';
 
 const fastify = Fastify({
-  logger: true
+  logger: true,
 });
 
 fastify.register(FastifyStatic, {
   root: path.join(process.cwd(), 'public'),
   prefix: '/public/',
-})
+});
 
 fastify.register(FastifyView, {
   engine: {
@@ -22,31 +21,47 @@ fastify.register(FastifyView, {
   },
 });
 
-// Declare a route
+/*
+ * Load the homepage
+ */
 fastify.get('/', function (request, reply) {
-  return reply.view("/templates/index.ejs");
-})
+  return reply.view('/templates/pages/index.ejs');
+});
 
-// fastify.get('/api/content', async function(request, reply) {
-//   // ejs/html response
-//   const uuid = v4();
-//   return reply.view("/templates/test.ejs", { text: "Eric was here", uuid });
-// })
+/*
+ * Define API endpoints
+ */
+fastify.get('/api/content', async function (request, reply) {
+  // fetch the template from the file system
 
-fastify.get('/api/content', async function(request, reply) {
-  const template = fs.readFileSync(path.join('templates', 'test.ejs'), {encoding:'utf8'})
-  const uuid = v4();
-  const html = ejs.render(template, { text: "Eric was json", uuid: uuid });
+  const script = '/public/partials/content.js';
+  const template = fs.readFileSync(path.join('templates', 'partials/content.ejs'), { encoding: 'utf8' });
 
-  reply.send({ html, __meta: { uuid } })
-})
+  // apply the data to the template to compute the final HTML
+  const html = ejs.render(template, { title: request.query.title });
 
+  /*
+   * if ?html=true query string is provided, we wrap the response in a pre-fab HTML
+   * template that will render and execute the hydrate function
+   */
+  if (request.query.html) {
+    const wrapperTemplate = fs.readFileSync(path.join('templates', 'pages', 'ajaxHtml.ejs'), { encoding: 'utf8' });
+    const completeHtml = ejs.render(wrapperTemplate, {
+      html,
+      script,
+      hydrateArgs: request.query.hydrateArgs,
+    });
+    return reply.type('text/html').send(completeHtml);
+  }
+  // send the JSON
+  reply.send({ html, script });
+});
 
 // Run the server!
 fastify.listen({ port: 3000 }, function (err, address) {
   if (err) {
-    fastify.log.error(err)
-    process.exit(1)
+    fastify.log.error(err);
+    process.exit(1);
   }
   // Server is now listening on ${address}
-})
+});

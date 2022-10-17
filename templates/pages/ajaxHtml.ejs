@@ -1,0 +1,20 @@
+<html>
+  <body>
+    <h1>The Web App</h1>
+    <div id="root">
+      <%- html %>
+    </div>
+    <script type="module">
+      import * as bootstrapScript from '<%= script %>';
+
+      (function runner() {
+        if (typeof bootstrapScript?.hydrate !== 'function') {
+          return;
+        }
+  
+        bootstrapScript.hydrate(document.querySelector('#root'))(<%- hydrateArgs %>);
+      })();
+
+    </script>
+  </body>
+</html>
