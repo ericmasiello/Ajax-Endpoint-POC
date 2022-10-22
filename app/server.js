@@ -31,11 +31,12 @@ fastify.get('/', function (request, reply) {
 /*
  * Define API endpoints
  */
-fastify.get('/api/content', async function (request, reply) {
+fastify.get('/api/example', async function (request, reply) {
   // fetch the template from the file system
 
-  const script = '/public/partials/content.js';
-  const template = fs.readFileSync(path.join('templates', 'partials/content.ejs'), { encoding: 'utf8' });
+  const script = '/public/partials/example.js';
+  const stylesheet = '/public/partials/example.css';
+  const template = fs.readFileSync(path.join('templates', 'partials/example.ejs'), { encoding: 'utf8' });
 
   // apply the data to the template to compute the final HTML
   const html = ejs.render(template, { title: request.query.title });
@@ -54,7 +55,7 @@ fastify.get('/api/content', async function (request, reply) {
     return reply.type('text/html').send(completeHtml);
   }
   // send the JSON
-  reply.send({ html, script });
+  reply.send({ html, script, stylesheet });
 });
 
 // Run the server!

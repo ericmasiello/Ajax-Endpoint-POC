@@ -3,9 +3,9 @@
   "version": "1.0.0",
   "description": "",
   "type": "module",
-  "main": "app/index.js",
+  "main": "app/server.js",
   "scripts": {
-    "start": "node app/index.js",
+    "start": "node app/server.js",
     "cypress": "cypress open",
     "format": "prettier --write ."
   },

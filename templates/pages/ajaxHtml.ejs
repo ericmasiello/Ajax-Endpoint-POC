@@ -1,9 +1,10 @@
 <html>
+  <head>
+    <link rel="stylesheet" href="/public/pages/global.css" />
+  </head>
   <body>
-    <h1>The Web App</h1>
-    <div id="root">
-      <%- html %>
-    </div>
+    <h1>For Testing Purposes</h1>
+    <div id="root"><%- html %></div>
     <script type="module">
       import * as bootstrapScript from '<%= script %>';
 
@@ -11,10 +12,9 @@
         if (typeof bootstrapScript?.hydrate !== 'function') {
           return;
         }
-  
+
         bootstrapScript.hydrate(document.querySelector('#root'))(<%- hydrateArgs %>);
       })();
-
     </script>
   </body>
 </html>

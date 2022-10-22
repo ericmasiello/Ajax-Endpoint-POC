@@ -1,0 +1,12 @@
+/* Put global styles here */
+
+html {
+  font-family: 'Courier New', Courier, monospace;
+}
+
+input,
+select,
+textarea,
+button {
+  font-family: inherit;
+}
